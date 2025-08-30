@@ -96,3 +96,8 @@ body {
 .valid {
   border: 2px solid #41b883 !important;
 }
+
+.completed {
+  text-decoration: line-through;
+  opacity: .7;
+}

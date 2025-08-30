@@ -26,9 +26,13 @@ const handleAddTask = () => {
   const taskContent = document.createElement("p");
   taskContent.innerHTML = inputElement.value;
 
+  taskContent.addEventListener("click", () => handleClick(taskContent));
+
   const deleteItem = document.createElement("i");
   deleteItem.classList.add("fa-regular");
   deleteItem.classList.add("fa-trash-can");
+
+  deleteItem.addEventListener("click", () => handleDeleteClick());
 
   taskItemContainer.appendChild(taskContent);
   taskItemContainer.appendChild(deleteItem);
@@ -36,6 +40,17 @@ const handleAddTask = () => {
   taskContainer.appendChild(taskItemContainer);
 
   inputElement.value = "";
+};
+
+const handleClick = (taskContent) => {
+  const tasks = taskContainer.childNodes;
+
+  for (const task of tasks) {
+    const p = task.firstElementChild;
+    if (p && p === taskContent) {
+      p.classList.toggle("completed");
+    }
+  }
 };
 
 // Função para lidar com a mudança de estado do input, caso ele receba algum valor (ele fica true) ele remove a classe error
