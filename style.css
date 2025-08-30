@@ -56,8 +56,32 @@ body {
   padding: 30px 40px;
   border-radius: 10px;
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.9);
-  display: flex;
   margin-top: 60px;
+}
+
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px; /* dá respiro à esquerda/direita */
+  width: 100%;
+}
+
+.task-item > i {
+  display: inline-flex; /* vira uma caixinha flex */
+  align-items: center; /* centraliza vertical */
+  justify-content: center; /* centraliza horizontal */
+  width: 40px;
+  height: 40px;
+  padding: 0; /* não precisa mais padding */
+  line-height: 1; /* evita corte por altura de linha */
+  font-size: 18px; /* tamanho do ícone */
+  font-style: normal; /* remove itálico padrão do <i> */
+  background: #41b883;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 15px;
 }
 
 /* Utilities */
@@ -69,6 +93,6 @@ body {
   color: red;
 }
 
-.valid{
+.valid {
   border: 2px solid #41b883 !important;
 }

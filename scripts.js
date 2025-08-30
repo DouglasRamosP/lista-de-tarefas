@@ -1,6 +1,6 @@
 const inputElement = document.querySelector(".new-task-input");
 const addTaskButton = document.querySelector(".new-task-button");
-const taskContainer = document.querySelector("task-container");
+const taskContainer = document.querySelector(".task-container");
 
 // Valida o valor passado no imput, se estiver preenchido retorna true, se vazio retorna false.
 const validateIput = () => {
@@ -18,13 +18,24 @@ const handleAddTask = () => {
       inputElement.classList.add("error"),
       inputElement.classList.remove("valid")
     );
-  } else {
-    // Função para adicionar novas tarefas
-    if (inputIsValid) {
-      const valueInput = inputElement.value;
-      taskContainer.appendChild(".task-item")
-    }
   }
+
+  const taskItemContainer = document.createElement("div");
+  taskItemContainer.classList.add("task-item");
+
+  const taskContent = document.createElement("p");
+  taskContent.innerHTML = inputElement.value;
+
+  const deleteItem = document.createElement("i");
+  deleteItem.classList.add("fa-regular");
+  deleteItem.classList.add("fa-trash-can");
+
+  taskItemContainer.appendChild(taskContent);
+  taskItemContainer.appendChild(deleteItem);
+
+  taskContainer.appendChild(taskItemContainer);
+
+  inputElement.value = "";
 };
 
 // Função para lidar com a mudança de estado do input, caso ele receba algum valor (ele fica true) ele remove a classe error
