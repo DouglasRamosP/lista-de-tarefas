@@ -32,7 +32,9 @@ const handleAddTask = () => {
   deleteItem.classList.add("fa-regular");
   deleteItem.classList.add("fa-trash-can");
 
-  deleteItem.addEventListener("click", () => handleDeleteClick());
+  deleteItem.addEventListener("click", () =>
+    handleDeleteClick(taskItemContainer, taskContent)
+  );
 
   taskItemContainer.appendChild(taskContent);
   taskItemContainer.appendChild(deleteItem);
@@ -40,17 +42,36 @@ const handleAddTask = () => {
   taskContainer.appendChild(taskItemContainer);
 
   inputElement.value = "";
+
+  updateLocalStorage();
 };
 
 const handleClick = (taskContent) => {
-  const tasks = taskContainer.childNodes;
+  const tasks = taskContainer.children;
 
   for (const task of tasks) {
-    const p = task.firstElementChild;
-    if (p && p === taskContent) {
-      p.classList.toggle("completed");
+    const currentTaskIsBeingClicked = task.firstElementChild === taskContent;
+
+    if (currentTaskIsBeingClicked) {
+      task.firstElementChild.classList.toggle("completed");
     }
   }
+
+  updateLocalStorage();
+};
+
+const handleDeleteClick = (taskItemContainer, taskContent) => {
+  const tasks = taskContainer.children;
+
+  for (const task of tasks) {
+    const currentTaskIsBeingClicked = task.firstElementChild === taskContent;
+
+    if (currentTaskIsBeingClicked) {
+      taskItemContainer.remove();
+    }
+  }
+
+  updateLocalStorage();
 };
 
 // Função para lidar com a mudança de estado do input, caso ele receba algum valor (ele fica true) ele remove a classe error
@@ -64,6 +85,53 @@ const handleInputChange = () => {
     );
   }
 };
+
+const updateLocalStorage = () => {
+  const tasks = taskContainer.children;
+
+  const localStorageTasks = [...tasks].map((task) => {
+    const content = task.firstElementChild;
+    const isCompleted = content.classList.contains("completed");
+
+    return { description: content.innerText, isCompleted };
+  });
+
+  localStorage.setItem("tasks", JSON.stringify(localStorageTasks));
+};
+
+const refreshTasksUsingLocalStorage = () => {
+  const tasksFromLocalStorage = JSON.parse(localStorage.getItem("tasks"));
+
+  if (!tasksFromLocalStorage) return;
+
+  for (const task of tasksFromLocalStorage) {
+    const taskItemContainer = document.createElement("div");
+    taskItemContainer.classList.add("task-item");
+
+    const taskContent = document.createElement("p");
+    taskContent.innerText = task.description;
+    if (task.isCompleted) {
+      taskContent.classList.add("completed");
+    }
+
+    taskContent.addEventListener("click", () => handleClick(taskContent));
+
+    const deleteItem = document.createElement("i");
+    deleteItem.classList.add("fa-regular");
+    deleteItem.classList.add("fa-trash-can");
+
+    deleteItem.addEventListener("click", () =>
+      handleDeleteClick(taskItemContainer, taskContent)
+    );
+
+    taskItemContainer.appendChild(taskContent);
+    taskItemContainer.appendChild(deleteItem);
+
+    taskContainer.appendChild(taskItemContainer);
+  }
+};
+
+refreshTasksUsingLocalStorage();
 
 // Adiciona um escutador em addTaskButton, aguardando o click para chamar a função handleAddTask
 addTaskButton.addEventListener("click", () => handleAddTask());
